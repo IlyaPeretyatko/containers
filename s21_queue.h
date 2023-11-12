@@ -41,7 +41,7 @@ class queue {
             size_ = 0;
         }
 
-        reference operator=(queue &&other) {
+        reference operator=(queue &&other) noexcept {
             std::swap(head_, other.head_);
             std::swap(tail_, other.tail_);
             std::swap(size_, other.size_);
@@ -84,19 +84,20 @@ class queue {
         }
 
         void pop() noexcept {
-            if (!(this->empty())) {
-                if (size_ == 1) {
-                    delete head_;
-                } else {
-                    node * saveHead = head_;
-                    head_ = head_->next_;
-                    delete saveHead;
-                }
-                --size_;
+            if (this->empty()) {
+                throw std::length_error("Queue is empty");
             }
+            if (size_ == 1) {
+                delete head_;
+            } else {
+                node * saveHead = head_;
+                head_ = head_->next_;
+                delete saveHead;
+            }
+            --size_;
         }
 
-        void swap(queue& other) {
+        void swap(queue& other) noexcept {
             std::swap(head_, other.head_);
             std::swap(tail_, other.tail_);
             std::swap(size_, other.size_);
