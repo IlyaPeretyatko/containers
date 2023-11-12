@@ -17,15 +17,17 @@ class queue {
         node * head_;
         node * tail_;
         size_type size_;
+
     public:
         queue() : head_(nullptr), tail_(nullptr), size_(0) {};
 
-        //queue(std::initializer_list<value_type> const &items); //
+        queue(const std::initializer_list<value_type> &items) : head_(nullptr), tail_(nullptr), size_(0) {
+            for (auto i: items) {
+                push(i);
+            }
+        }
 
-        queue(const queue &other) {
-            size_ = 0;
-            head_ = nullptr;
-            tail_ = nullptr;
+        queue(const queue &other) : head_(nullptr), tail_(nullptr), size_(0) {
             node * point = other.head_;
             while (point != nullptr) {
                 push(point->value_);
@@ -34,12 +36,7 @@ class queue {
         }
 
         queue(queue &&other) {
-            std::swap(head_, other.head_);
-            std::swap(tail_, other.tail_);
-            std::swap(size_, other.size_);
-            other.head_ = nullptr;
-            other.tail_ = nullptr;
-            other.size_ = 0;
+            (*this) = other;
         }
 
         ~queue() {
@@ -51,7 +48,14 @@ class queue {
             size_ = 0;
         }
 
-        //operator=(queue &&q); 
+        reference operator=(queue &&other) {
+            std::swap(head_, other.head_);
+            std::swap(tail_, other.tail_);
+            std::swap(size_, other.size_);
+            other.head_ = nullptr;
+            other.tail_ = nullptr;
+            other.size_ = 0;
+        } 
 
         const_reference front() const {
             if (this->empty()) {
@@ -99,8 +103,11 @@ class queue {
             }
         }
 
-
-        //void swap(queue& other); //
+        void swap(queue& other) {
+            std::swap(head_, other.head_);
+            std::swap(tail_, other.tail_);
+            std::swap(size_, other.size_);
+        }
 };
 
 #endif
