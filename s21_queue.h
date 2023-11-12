@@ -3,22 +3,15 @@
 
 #include <iostream>
 
-template <class value_type, 
-        class reference = value_type &,
-        class const_reference = const value_type &,
-        class size_type = size_t>
+namespace s21 {
+template <class T>
 class queue {
-    private:
-        struct node {
-            value_type value_;
-            node * next_;
-            node(const_reference value) : value_(value), next_(nullptr) {};
-        };
-        node * head_;
-        node * tail_;
-        size_type size_;
-
     public:
+        using value_type = T;
+        using reference = T &;
+        using size_type = size_t;
+        using const_reference = const T &;
+
         queue() : head_(nullptr), tail_(nullptr), size_(0) {};
 
         queue(const std::initializer_list<value_type> &items) : head_(nullptr), tail_(nullptr), size_(0) {
@@ -108,6 +101,17 @@ class queue {
             std::swap(tail_, other.tail_);
             std::swap(size_, other.size_);
         }
+
+        private:
+            struct node {
+                value_type value_;
+                node * next_;
+                node(const_reference value) : value_(value), next_(nullptr) {};
+            };
+            node * head_;
+            node * tail_;
+            size_type size_;
 };
+}
 
 #endif
