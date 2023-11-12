@@ -33,7 +33,14 @@ class queue {
             }
         }
 
-        //queue(queue &&q);
+        queue(queue &&other) {
+            std::swap(head_, other.head_);
+            std::swap(tail_, other.tail_);
+            std::swap(size_, other.size_);
+            other.head_ = nullptr;
+            other.tail_ = nullptr;
+            other.size_ = 0;
+        }
 
         ~queue() {
             while (!(this->empty())) {
