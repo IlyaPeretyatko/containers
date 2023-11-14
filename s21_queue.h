@@ -29,7 +29,11 @@ class queue {
         }
 
         queue(queue &&other) {
-            (*this) = other;
+            std::swap(head_, other.head_);
+            std::swap(tail_, other.tail_);
+            std::swap(size_, other.size_);
+            other.head_ = nullptr;
+            other.tail_ = nullptr;
         }
 
         ~queue() {
@@ -41,13 +45,12 @@ class queue {
             size_ = 0;
         }
 
-        reference operator=(queue &&other) noexcept {
-            std::swap(head_, other.head_);
-            std::swap(tail_, other.tail_);
-            std::swap(size_, other.size_);
-            other.head_ = nullptr;
-            other.tail_ = nullptr;
-            other.size_ = 0;
+        queue operator=(const queue &other) noexcept {
+            if (this != &other) {
+                queue tmp(other);
+                this->swap(tmp);
+            }
+            return *this;
         } 
 
         const_reference front() const {
@@ -83,7 +86,7 @@ class queue {
             ++size_;
         }
 
-        void pop() noexcept {
+        void pop() {
             if (this->empty()) {
                 throw std::length_error("Queue is empty");
             }
