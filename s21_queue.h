@@ -32,8 +32,9 @@ class queue {
             std::swap(head_, other.head_);
             std::swap(tail_, other.tail_);
             std::swap(size_, other.size_);
-            other.head_ = nullptr;
-            other.tail_ = nullptr;
+            while (!(other.empty())) {
+                other.pop();
+            }
         }
 
         ~queue() {
