@@ -15,7 +15,7 @@ class stack {
         stack() : head_(nullptr), size_(0) {};
 
         stack(const std::initializer_list<value_type> &items) : head_(nullptr), size_(0) {
-            for (const_reference i: items) {
+            for (auto i: items) {
                 push(i);
             }
         }
