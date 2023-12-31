@@ -109,9 +109,104 @@ TEST(Stack, ConstructorCopy) {
     EXPECT_EQ(test2.top(), 5);
 }
 
+TEST(Queue, PushPopSizeEmpty) {
+    s21::queue<int> test;
+    test.push(5);
+    test.push(4);
+    test.push(3);
+    EXPECT_EQ(test.size(), 3);
+    EXPECT_EQ(test.empty(), false);
+    EXPECT_EQ(test.back(), 3);
+    EXPECT_EQ(test.front(), 5);
+    test.pop();
+    EXPECT_EQ(test.size(), 2);
+    EXPECT_EQ(test.empty(), false);
+    EXPECT_EQ(test.back(), 3);
+    EXPECT_EQ(test.front(), 4);
+    test.pop();
+    EXPECT_EQ(test.size(), 1);
+    EXPECT_EQ(test.empty(), false);
+    EXPECT_EQ(test.back(), 3);
+    EXPECT_EQ(test.front(), 3);
+    test.pop();
+    EXPECT_EQ(test.size(), 0);
+    EXPECT_EQ(test.empty(), true);
+}
 
+TEST(Queue, Swap) {
+    s21::queue<int> test1;
+    test1.push(5);
+    test1.push(4);
+    test1.push(3);
+    s21::queue<int> test2;
+    test2.push(5);
+    test2.push(4);
+    test1.swap(test2);
+    EXPECT_EQ(test1.size(), 2);
+    EXPECT_EQ(test2.size(), 3);
+    EXPECT_EQ(test1.front(), 5);
+    EXPECT_EQ(test2.front(), 5);
+    EXPECT_EQ(test1.back(), 4);
+    EXPECT_EQ(test2.back(), 3);
+    test1.pop();
+    EXPECT_EQ(test1.size(), 1);
+    EXPECT_EQ(test1.front(), 4);
+    test2.pop();
+    EXPECT_EQ(test2.size(), 2);
+    EXPECT_EQ(test2.front(), 4);
+}
+
+TEST(Queue, Equating) {
+    s21::queue<int> test1;
+    test1.push(5);
+    test1.push(4);
+    test1.push(3);
+    s21::queue<int> test2;
+    test2.push(5);
+    test2.push(4);
+    test1 = test2;
+    EXPECT_EQ(test1.size(), 2);
+    EXPECT_EQ(test1.back(), 4);
+    EXPECT_EQ(test1.front(), 5);
+    test1.pop();
+    EXPECT_EQ(test1.size(), 1);
+    EXPECT_EQ(test1.front(), 4);
+    EXPECT_EQ(test1.back(), 4);
+    EXPECT_EQ(test2.size(), 2);
+    EXPECT_EQ(test2.back(), 4);
+    EXPECT_EQ(test2.front(), 5);
+    test2.pop();
+    EXPECT_EQ(test2.size(), 1);
+    EXPECT_EQ(test2.front(), 4);
+    EXPECT_EQ(test2.back(), 4);
+}
+
+TEST(Queue, ConstructorBasic) {
+    s21::queue<int> test;
+    EXPECT_EQ(test.empty(), true);
+}
+
+TEST(Queue, ConstructorCopy) {
+    s21::queue<int> test2;
+    test2.push(5);
+    test2.push(4);
+    s21::queue<int> test1(test2);
+    EXPECT_EQ(test1.size(), 2);
+    EXPECT_EQ(test1.back(), 4);
+    EXPECT_EQ(test1.front(), 5);
+    test1.pop();
+    EXPECT_EQ(test1.back(), 4);
+    EXPECT_EQ(test1.front(), 4);
+    EXPECT_EQ(test2.size(), 2);
+    EXPECT_EQ(test2.back(), 4);
+    EXPECT_EQ(test2.front(), 5);
+    test2.pop();
+    EXPECT_EQ(test2.back(), 4);
+    EXPECT_EQ(test2.front(), 4);
+}
 
 int main(int argc, char *argv[]) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
+
