@@ -1,6 +1,7 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <sstream>
+#include <utility>
 
 #include "s21_containers.h"
 
@@ -123,6 +124,21 @@ TEST(Stack, ConstructorInitList) {
     EXPECT_EQ(test.top(), 3);
 }
 
+TEST(Stack, ConstructorMove) {
+    std::initializer_list<int> elems {1, 2, 3, 4, 5};
+    s21::stack<int> test(elems);
+    s21::stack<int> test2(std::move(test));
+    EXPECT_EQ(test2.size(), 5);
+    EXPECT_EQ(test2.top(), 5);
+    test2.pop();
+    EXPECT_EQ(test2.size(), 4);
+    EXPECT_EQ(test2.top(), 4);
+    test2.pop();
+    EXPECT_EQ(test2.size(), 3);
+    EXPECT_EQ(test2.top(), 3);
+    EXPECT_EQ(test.size(), 0);
+}
+
 TEST(Queue, PushPopSizeEmpty) {
     s21::queue<int> test;
     test.push(5);
@@ -235,6 +251,24 @@ TEST(Queue, ConstructorInitList) {
     EXPECT_EQ(test.front(), 3);
 }
 
+TEST(Queue, ConstructorMove) {
+    std::initializer_list<int> elems {1, 2, 3, 4, 5};
+    s21::queue<int> test1(elems);
+    s21::queue<int> test(std::move(test1));
+    EXPECT_EQ(test.size(), 5);
+    EXPECT_EQ(test.back(), 5);
+    EXPECT_EQ(test.front(), 1);
+    test.pop();
+    EXPECT_EQ(test.size(), 4);
+    EXPECT_EQ(test.back(), 5);
+    EXPECT_EQ(test.front(), 2);
+    test.pop();
+    EXPECT_EQ(test.size(), 3);
+    EXPECT_EQ(test.back(), 5);
+    EXPECT_EQ(test.front(), 3);
+    EXPECT_EQ(test1.size(), 0);
+}
+
 TEST(Array, Constructors) {
     s21::array<int, 10> test;
     EXPECT_EQ(test.size(), 10);
@@ -254,6 +288,18 @@ TEST(Array, ConstructorInitList) {
     EXPECT_EQ(test[2], 3);
     EXPECT_EQ(test[3], 4);
     EXPECT_EQ(test[4], 5);
+}
+
+TEST(Array, ConstructorMove) {
+    std::initializer_list<int> elems {1, 2, 3, 4, 5};
+    s21::array<int, 5> test(elems);
+    s21::array<int, 5> test2(std::move(test));
+    EXPECT_EQ(test2[0], 1);
+    EXPECT_EQ(test2[1], 2);
+    EXPECT_EQ(test2[2], 3);
+    EXPECT_EQ(test2[3], 4);
+    EXPECT_EQ(test2[4], 5);
+    EXPECT_EQ(test.size(), 0);
 }
 
 TEST(Array, Equating) {
@@ -294,6 +340,11 @@ TEST(Array, Iterator) {
         ss << i << " ";
     }
     EXPECT_EQ(ss.str(), "11 11 11 8 11 ");
+}
+
+TEST(Array, Size) {
+    s21::array<int,5> test;
+    EXPECT_EQ(test.max_size(), 5);
 }
 
 int main(int argc, char *argv[]) {

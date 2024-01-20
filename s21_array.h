@@ -31,8 +31,11 @@ class array {
             std::copy(a.array_, a.array_ + a.size() - 1, array_);   
         }
 
-        array(array &&a) : size_(N) {
-            std::swap(a.array_, array_);
+        array(array &&a) {
+            array_ = a.array_;
+            size_ = a.size_;
+            a.array_ = nullptr;
+            a.size_ = 0;
         }
 
         ~array() {
@@ -55,7 +58,7 @@ class array {
             return *(array_ + pos);
         }
 
-        reference operator[](size_type pos) { return (*this).at(pos); }
+        reference operator[](size_type pos) noexcept { return (*this).at(pos); }
 
         const_reference front() const noexcept { return *array_; }
 
@@ -71,11 +74,11 @@ class array {
             return array_ + size_;
         }
 
-        bool empty() const noexcept { return (N == 0); }
+        bool empty() const noexcept { return (size_ == 0); }
 
-        size_type size() const noexcept { return N; }
+        size_type size() const noexcept { return size_; }
 
-        size_type max_size() const noexcept { return N; };
+        size_type max_size() const noexcept { return size_; };
 
         void swap(array& other) {
             std::swap(other.array_, array_);

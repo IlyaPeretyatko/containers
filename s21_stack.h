@@ -36,11 +36,10 @@ class stack {
         }
 
         stack(stack &&other) {
-            std::swap(head_, other.head_);
-            std::swap(size_, other.size_);
-            while (!(other.empty())) {
-                other.pop();
-            }
+            head_ = other.head_;
+            size_ = other.size_;
+            other.head_ = nullptr;
+            other.size_ = 0;
         }
 
         ~stack() {
