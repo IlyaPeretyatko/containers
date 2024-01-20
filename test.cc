@@ -1,5 +1,6 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <sstream>
 
 #include "s21_containers.h"
 
@@ -109,6 +110,19 @@ TEST(Stack, ConstructorCopy) {
     EXPECT_EQ(test2.top(), 5);
 }
 
+TEST(Stack, ConstructorInitList) {
+    std::initializer_list<int> elems {1, 2, 3, 4, 5};
+    s21::stack<int> test(elems);
+    EXPECT_EQ(test.size(), 5);
+    EXPECT_EQ(test.top(), 5);
+    test.pop();
+    EXPECT_EQ(test.size(), 4);
+    EXPECT_EQ(test.top(), 4);
+    test.pop();
+    EXPECT_EQ(test.size(), 3);
+    EXPECT_EQ(test.top(), 3);
+}
+
 TEST(Queue, PushPopSizeEmpty) {
     s21::queue<int> test;
     test.push(5);
@@ -203,6 +217,83 @@ TEST(Queue, ConstructorCopy) {
     test2.pop();
     EXPECT_EQ(test2.back(), 4);
     EXPECT_EQ(test2.front(), 4);
+}
+
+TEST(Queue, ConstructorInitList) {
+    std::initializer_list<int> elems {1, 2, 3, 4, 5};
+    s21::queue<int> test(elems);
+    EXPECT_EQ(test.size(), 5);
+    EXPECT_EQ(test.back(), 5);
+    EXPECT_EQ(test.front(), 1);
+    test.pop();
+    EXPECT_EQ(test.size(), 4);
+    EXPECT_EQ(test.back(), 5);
+    EXPECT_EQ(test.front(), 2);
+    test.pop();
+    EXPECT_EQ(test.size(), 3);
+    EXPECT_EQ(test.back(), 5);
+    EXPECT_EQ(test.front(), 3);
+}
+
+TEST(Array, Constructors) {
+    s21::array<int, 10> test;
+    EXPECT_EQ(test.size(), 10);
+    EXPECT_FALSE(test.empty());
+    test.fill(5);
+    s21::array<int, 10> test2(test);
+    EXPECT_EQ(test2.size(), 10);
+    EXPECT_FALSE(test2.empty());
+    EXPECT_EQ(test2[8], 5);
+}
+
+TEST(Array, ConstructorInitList) {
+    std::initializer_list<int> elems {1, 2, 3, 4, 5};
+    s21::array<int, 5> test(elems);
+    EXPECT_EQ(test[0], 1);
+    EXPECT_EQ(test[1], 2);
+    EXPECT_EQ(test[2], 3);
+    EXPECT_EQ(test[3], 4);
+    EXPECT_EQ(test[4], 5);
+}
+
+TEST(Array, Equating) {
+    s21::array<int, 5> test1;
+    s21::array<int, 5> test2;
+    test2.fill(8);
+    test1 = test2;
+    EXPECT_EQ(test1[3], 8);
+}
+
+TEST(Array, FrontBackData) {
+    s21::array<int, 5> test1;
+    test1.fill(8);
+    test1[0] = 3;
+    test1.at(4) = 9;
+    EXPECT_EQ(test1.front(), 3);
+    EXPECT_EQ(test1.back(), 9);
+    EXPECT_EQ(*(test1.data()), 3);
+    EXPECT_EQ(*(test1.data() + 1), 8);
+}
+
+TEST(Array, Swap) {
+    s21::array<int, 5> test1;
+    s21::array<int, 5> test2;
+    test1.fill(8);
+    test2.fill(5);
+    test1.swap(test2);
+    EXPECT_EQ(test1.front(), 5);
+    EXPECT_EQ(test2.back(), 8);
+}
+
+TEST(Array, Iterator) {
+    s21::array<int,5> test;
+    test.fill(11);
+    test[3] = 8;
+    std::stringstream ss;
+    for (auto i : test) {
+        ss << i << " ";
+    }
+    EXPECT_EQ(ss.str(), "11 11 11 8 11 ");
 }
 
 int main(int argc, char *argv[]) {
